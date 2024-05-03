@@ -2,9 +2,10 @@ import cv2 as cv
 import numpy as np
 import os
 
-def Template_matching(Template_folder, image, threshold):
+def Template_matching(Template_folder, img_rgb, threshold, iou_threshold):
     crownbox = []
-    img_rgb = cv.imread(image)
+    #print(image)
+    #img_rgb = cv.imread(image)
     img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
 
     for file_name in Template_folder:
@@ -46,18 +47,21 @@ def Template_matching(Template_folder, image, threshold):
                     iou = interArea / float(boxAArea + boxBArea - interArea)
                     unions.append(iou)
                 
-                if all(iou < 0.2 for iou in unions):
+                if all(iou < iou_threshold for iou in unions):
                     crownbox.append(newbox)
                     cv.rectangle(img_rgb, pts, (pts[0] + w, pts[1] + h), (0,255,255), 2)
             #    print(crownbox)
-    return len(crownbox), img_rgb   
+    return len(crownbox)   
                
                 
                 
 
 def main():
+    img_rgb = cv.imread(r"King Domino dataset/Cropped and perspective corrected boards/6.jpg")
+    threshold = 0.7
     template_folder = os.listdir(r"Templates") 
-    result_image, img_rgb = Template_matching(template_folder, r"King Domino dataset/Cropped and perspective corrected boards/6.jpg", 0.7)
+    iou_threshold = 0.2
+    result_image = Template_matching(template_folder, img_rgb, threshold, iou_threshold)
     cv.imshow('Detected', img_rgb)
     print(result_image)
     cv.waitKey(0)
