@@ -3,6 +3,7 @@
 class Board():
     def __init__(self, tiles = [[]]):
         self.tiles = tiles
+        self.blobs = []
         """
         Tiles (for a single board) will look like this:
         tiles = [
@@ -14,7 +15,7 @@ class Board():
         ]
         """
     
-    def __adjacent__(self, x, y):
+    def _adjacent(self, x, y):
         """
         gets adjacent tiles (diagonals not included)
         """
@@ -43,7 +44,7 @@ def main():
 
     # print(tiles)
     board = Board(tiles=tiles)
-    adjacent = board.__adjacent__(2,2)
+    adjacent = board._adjacent(2,2)
     print(adjacent)
 
 if __name__ == "__main__":
