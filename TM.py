@@ -7,22 +7,24 @@ def Template_matching(Template_folder, image, threshold):
     img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
 
     for file_name in Template_folder:
-        template_path = os.path.join(r"/Users/rubenkronborg/Desktop/Templates", file_name)
+        template_path = os.path.join(r"Templates", file_name)
         template = cv.imread(template_path, cv.IMREAD_GRAYSCALE)
         w, h = template.shape[::-1]
 
-        res = cv.matchTemplate(img_gray, template, cv.TM_CCOEFF_NORMED)
-        loc = np.where(res >= threshold)
+        for rotation in range(4):
+            template = np.rot90(template, rotation)
+            res = cv.matchTemplate(img_gray, template, cv.TM_CCOEFF_NORMED)
+            loc = np.where(res >= threshold)
 
-        for pt in zip(*loc[::-1]):
-            cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,255,255), 2)
+            for pt in zip(*loc[::-1]):
+                cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,255,255), 2)
 
     return img_rgb
 
 
 def main():
-    template_folder = os.listdir(r"/Users/rubenkronborg/Desktop/Templates") 
-    result_image = Template_matching(template_folder, r"King Domino dataset/Cropped and perspective corrected boards/25.jpg", 0.7)
+    template_folder = os.listdir(r"Templates") 
+    result_image = Template_matching(template_folder, r"King Domino dataset/Cropped and perspective corrected boards/25.jpg", 0.84)
     cv.imshow('Detected', result_image)
     cv.waitKey(0)
     cv.destroyAllWindows()
