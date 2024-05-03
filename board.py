@@ -4,16 +4,6 @@ class Board():
     def __init__(self, tiles = [[]]):
         self.tiles = tiles
         self.blobs = []
-        """
-        Tiles (for a single board) will look like this:
-        tiles = [
-            [tile1, tile2, tile3, tile4, tile5],
-            [tile6, tile7, tile8, tile9, tile10],
-            [tile11, tile12, tile13, tile14, tile15],
-            [tile16, tile17, tile18, tile19, tile20],
-            [tile21, tile22, tile23, tile24, tile25]            
-        ]
-        """
     
     def _adjacent(self, x, y):
         """
@@ -30,7 +20,21 @@ class Board():
             adjacent.append(self.tiles[x][y-1])
         return adjacent
     
-    def blob(self):
+    def _get_blob(self):
+        for x in range(len(self.tiles)):
+            for y in range(len(self.tiles[x])):
+                for i in range(len(self.blobs)):
+                    if self.tiles[x][y] not in self.blobs[i]:
+                        blob = []
+                        blob.append(self.tiles[x][y])
+                        terrain = self.tiles[x][y][0]
+                        for adj in self._adjacent(x, y):
+                            if adj[0] == terrain:
+                                blob.append(adj)
+                        self.blobs.append(blob)
+        return self.blobs
+    
+    def get_score(self):
         pass
     
 def main():
@@ -46,6 +50,9 @@ def main():
     board = Board(tiles=tiles)
     adjacent = board._adjacent(2,2)
     print(adjacent)
+    blobs = board._get_blob()
+    print(blobs)
+
 
 if __name__ == "__main__":
     main()
