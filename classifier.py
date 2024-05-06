@@ -10,10 +10,12 @@ def main():
             for _, _, files in os.walk(f"trainset/{dir}"):
                 for file in files:
                     tile = cv.imread(f"trainset/{dir}/{file}")
-                    tile = np.ravel(tile, order='C')
+                    tile = np.ravel(tile)
+                    tiles.append(dir)
                     tiles.append(tile)
-            dir = pd.DataFrame(tiles)
-            print(dir)
+            train = pd.DataFrame(tiles)
+            print(train)
+    train.to_csv("train.csv", index=False)
             
     
                     
