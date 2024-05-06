@@ -2,20 +2,20 @@ import cv2 as cv
 import numpy as np
 import os
 
-def Template_matching(Template_folder, img_rgb, threshold, iou_threshold):
+def Template_matching(Template_folder, img_bgr, threshold, iou_threshold):
     crownbox = []
     #print(image)
-    #img_rgb = cv.imread(image)
-    img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
+    
+    #img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
 
     for file_name in Template_folder:
         template_path = os.path.join(r"Templates", file_name)
-        template = cv.imread(template_path, cv.IMREAD_GRAYSCALE)
+        template = cv.imread(template_path)
 
         for rotation in range(4):
             template = np.rot90(template, rotation)
-            w, h = template.shape[::-1]
-            res = cv.matchTemplate(img_gray, template, cv.TM_CCOEFF_NORMED)
+            h, w, _ = template.shape
+            res = cv.matchTemplate(img_bgr, template, cv.TM_CCOEFF_NORMED)
             loc = np.where(res >= threshold)
             
         
@@ -25,7 +25,9 @@ def Template_matching(Template_folder, img_rgb, threshold, iou_threshold):
 
                 if crownbox == []: 
                     crownbox.append(newbox)
-                    cv.rectangle(img_rgb, pts, (pts[0] + w, pts[1] + h), (0,255,255), 2)
+                    cv.rectangle(img_bgr, pts, (pts[0] + w, pts[1] + h), (0,255,255), 2)
+                    print(template_path)
+                    print(newbox)
 
                 for box in crownbox: 
                     xA = max(box[0], newbox[0])
@@ -49,7 +51,9 @@ def Template_matching(Template_folder, img_rgb, threshold, iou_threshold):
                 
                 if all(iou < iou_threshold for iou in unions):
                     crownbox.append(newbox)
-                    cv.rectangle(img_rgb, pts, (pts[0] + w, pts[1] + h), (0,255,255), 2)
+                    cv.rectangle(img_bgr, pts, (pts[0] + w, pts[1] + h), (0,255,255), 2)
+                    print(template_path)
+                    print(newbox)
             #    print(crownbox)
     return len(crownbox)   
                
@@ -57,8 +61,8 @@ def Template_matching(Template_folder, img_rgb, threshold, iou_threshold):
                 
 
 def main():
-    img_rgb = cv.imread(r"King Domino dataset/Cropped and perspective corrected boards/6.jpg")
-    threshold = 0.7
+    img_rgb = cv.imread(r"King Domino dataset/Cropped and perspective corrected boards/4.jpg")
+    threshold = 0.8
     template_folder = os.listdir(r"Templates") 
     iou_threshold = 0.2
     result_image = Template_matching(template_folder, img_rgb, threshold, iou_threshold)
