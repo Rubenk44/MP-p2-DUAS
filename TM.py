@@ -4,9 +4,6 @@ import os
 
 def Template_matching(Template_folder, img_bgr, threshold, iou_threshold):
     crownbox = []
-    #print(image)
-    
-    #img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
 
     for file_name in Template_folder:
         template_path = os.path.join(r"Templates", file_name)
@@ -61,8 +58,8 @@ def Template_matching(Template_folder, img_bgr, threshold, iou_threshold):
                 
 
 def main():
-    img_rgb = cv.imread(r"King Domino dataset/Cropped and perspective corrected boards/4.jpg")
-    threshold = 0.8
+    img_rgb = cv.imread(r"King Domino dataset/Cropped and perspective corrected boards/6.jpg")
+    threshold = 0.749
     template_folder = os.listdir(r"Templates") 
     iou_threshold = 0.2
     result_image = Template_matching(template_folder, img_rgb, threshold, iou_threshold)
