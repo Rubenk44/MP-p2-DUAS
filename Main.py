@@ -2,6 +2,7 @@ import cv2 as cv
 import os
 import numpy as np
 from board import Board
+import pandas as pd
 
 from TM import Template_matching
 
@@ -10,6 +11,7 @@ def get_tiles(image):
     for i in range(5):
         for j in range(5):
             tiles.append(image[100*i:100*(i+1), 100*j:100*(j+1)])
+            print(tiles[-1])
     return tiles
 
 def main():

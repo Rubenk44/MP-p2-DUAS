@@ -1,30 +1,23 @@
-import cv2 as cv
-import os
-import pandas as pd
 import numpy as np
+import pandas as pd
+import os
+import cv2 as cv
+from Main import get_tiles
 
-def flatten(img):
-    # Flatten the image
-    img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    img = cv.resize(img, (100, 100))
-    img = img.flatten()
-    return img
-
-def main():
-    for _, dirs, _ in os.walk("trainset"):
-        for dir in dirs:
-            print(dir)
-            tiles = []  # Move the tiles list outside of the innermost loop
-            for _, _, files in os.walk(f"trainset/{dir}"):
-                for file in files:
-                    tile = cv.imread(f"trainset/{dir}/{file}")
-                    print(tile)
-                    tile = flatten(tile)
-                    tiles.append(tile)
-            # for each dir create a dataframe
-            df = pd.DataFrame(tiles)
-            df.to_csv(f"{dir}.csv", index=False)
-    # train.to_csv("train.csv", index=False)
+def train():
+    df = pd.DataFrame(columns=["tile", "terrain"])
+    # iterate over the images for each terrain type folder in 'trainset' and append the flattened tile and terrain type to the dataframe
+    for terrain in os.listdir("trainset"):
+        for file in os.listdir(f"trainset/{terrain}"):
+            image = cv.imread(f"trainset/{terrain}/{file}")
+            image = cv.resize(image, (100, 100))
+            tile = []
+            for i in range(len(image.flatten())):
+                tile.append(image.flatten()[i])
+            image = pd.Series(data=(tile, terrain), index=["tile", "terrain"])
+            df = df._append(image, ignore_index=True)
+    # save the dataframe to a csv file
+    df.to_csv("trainset.csv", index=False)
 
 if __name__ == "__main__":
-    main()
+    train()
