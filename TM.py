@@ -2,7 +2,7 @@ import cv2 as cv
 import numpy as np
 import os
 
-def Template_matching(Template_folder, img_bgr, threshold, iou_threshold):
+def Template_matching(Template_folder, img_bgr, threshold=0.749, iou_threshold=0.2):
     crownbox = []
 
     for file_name in Template_folder:
@@ -51,8 +51,8 @@ def Template_matching(Template_folder, img_bgr, threshold, iou_threshold):
                     cv.rectangle(img_bgr, pts, (pts[0] + w, pts[1] + h), (0,255,255), 2)
                     print(template_path)
                     print(newbox)
-            #    print(crownbox)
-    return len(crownbox)   
+    # print(crownbox)
+    return (crownbox, len(crownbox))
                
                 
                 
