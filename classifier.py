@@ -2,22 +2,46 @@ import numpy as np
 import pandas as pd
 import os
 import cv2 as cv
-from Main import get_tiles
+from sklearn.ensemble import RandomForestClassifier
+from joblib import dump, load
 
-def train():
-    df = pd.DataFrame(columns=["tile", "terrain"])
-    # iterate over the images for each terrain type folder in 'trainset' and append the flattened tile and terrain type to the dataframe
+def flatten_image(image):
+    # Flatten the image using NumPy
+    return image.flatten()
+
+def process_image(file_path, terrain):
+    # Load and preprocess the image
+    image = cv.imread(file_path)
+    image = cv.resize(image, (25, 25))
+    flattened_image = flatten_image(image)
+    return [terrain] + flattened_image.tolist()
+
+def get_train():
+    data = []
+    # Iterate over the images for each terrain type folder in 'trainset' and append the flattened tile and terrain type to the dataframe
     for terrain in os.listdir("trainset"):
-        for file in os.listdir(f"trainset/{terrain}"):
-            image = cv.imread(f"trainset/{terrain}/{file}")
-            image = cv.resize(image, (100, 100))
-            tile = []
-            for i in range(len(image.flatten())):
-                tile.append(image.flatten()[i])
-            image = pd.Series(data=(tile, terrain), index=["tile", "terrain"])
-            df = df._append(image, ignore_index=True)
-    # save the dataframe to a csv file
+        terrain_path = os.path.join("trainset", terrain)
+        for file in os.listdir(terrain_path):
+            file_path = os.path.join(terrain_path, file)
+            data.append(process_image(file_path, terrain))
+    
+    # Convert data to DataFrame
+    columns = ["terrain"] + [f"pixel{i}" for i in range(25 * 25 * 3)]  # Assuming RGB images
+    df = pd.DataFrame(data, columns=columns)
+    
+    # Save the dataframe to a csv file
     df.to_csv("trainset.csv", index=False)
 
+def train_model():
+    df = pd.read_csv("trainset.csv")
+    df.dropna(inplace=True)
+    X = df.drop("terrain", axis=1)
+    NaN_rows = np.argwhere(np.isnan(X))
+    y = df["terrain"]
+    model = RandomForestClassifier(n_estimators=100, n_jobs=-1)
+    model.fit(X, y)
+    dump(model, "model.joblib")
+
 if __name__ == "__main__":
-    train()
+    get_train()
+    train_model()

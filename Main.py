@@ -1,8 +1,12 @@
+import warnings
+warnings.filterwarnings("ignore")
 import cv2 as cv
 import os
 import numpy as np
 from board import Board
 import pandas as pd
+from joblib import load
+
 
 from TM import Template_matching
 
@@ -11,29 +15,38 @@ def get_tiles(image):
     for i in range(5):
         for j in range(5):
             tiles.append(image[100*i:100*(i+1), 100*j:100*(j+1)])
-            print(tiles[-1])
     return tiles
 
 def main():
+    model = load("model.joblib")
     for _, _, files in os.walk(r"King Domino dataset\Cropped and perspective corrected boards"):
         for file in files:
-            game = cv.imread(f"King Domino dataset/Cropped and perspective corrected boards/{file}")
-            tiles = get_tiles(game)
-            board = Board()
-            groups = []
-            for tile in tiles:
-                # classifying the tile
-                crowns = Template_matching(os.listdir(r"Templates"), tile)
-                print(crowns)
-                # classify the tile
-                # terrain = classify(tile)
-                # add the tile to the Board object
-                # board.add_tile((terrain, crowns), x, y)
-            # print(board.get_score())
-            break
-
+            # check if the file is above 59
+            if int(file.split(".")[0]) > 59:
+                # check file index
+                print(file)
+                game = cv.imread(f"King Domino dataset/Cropped and perspective corrected boards/{file}")
+                tiles = get_tiles(game)
+                board = Board()
+                groups = []
+                for num, tile in enumerate(tiles):
+                    # classifying the tile
+                    image = tile
+                    crowns = Template_matching(os.listdir(r"Templates"), tile)
+                    # print(crowns)
+                    # classify the tile
+                    tile = cv.resize(tile, (25, 25))
+                    tile = tile.flatten()
+                    terrain = model.predict([tile])[0]
+                    # add the tile to the Board object
+                    x = num % 5
+                    y = num // 5
+                    board.add_tile((terrain, crowns), x, y)
+                print(board.get_score())
+                cv.waitKey(0)
+            else:
+                continue
             
-
 if __name__ == "__main__":
     main()
 
