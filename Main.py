@@ -1,3 +1,13 @@
+import cv2 as cv
+import os
+import numpy as np
+from board import Board
+
+from TM import Template_matching
+
+def main():
+    for _, _, files in os.walk(r"King Domino dataset\Cropped and perspective corrected boards"):
+        board = cv.imread(f"King Domino dataset\Cropped and perspective corrected boards\{files}.jpg")
 
 
 
@@ -17,4 +27,3 @@ scores = {"1.jpg":"36","2.jpg":"43","3.jpg":"52","4.jpg":"42","5.jpg":"36","6.jp
           "79.jpg":"","80.jpg":"","81.jpg":"","82.jpg":"","83.jpg":"","84.jpg":"",
           "85.jpg":"","86.jpg":"","87.jpg":"","88.jpg":"","89.jpg":"","90.jpg":"",
           "91.jpg":"","92.jpg":"","93.jpg":""}
-

@@ -1,14 +1,9 @@
-
-
 class Board():
     def __init__(self, tiles = [[]]):
         self.tiles = tiles
         self.blobs = []
     
     def _adjacent(self, x, y):
-        """
-        gets adjacent tiles (diagonals not included)
-        """
         adjacent = []
         if x+1 < len(self.tiles):
             adjacent.append(self.tiles[x+1][y])
@@ -19,23 +14,23 @@ class Board():
         if y-1 >= 0:
             adjacent.append(self.tiles[x][y-1])
         return adjacent
-    
+
     def _get_blob(self):
+        blobs = []
         for x in range(len(self.tiles)):
             for y in range(len(self.tiles[x])):
-                for i in range(len(self.blobs)):
-                    if self.tiles[x][y] not in self.blobs[i]:
-                        blob = []
-                        blob.append(self.tiles[x][y])
-                        terrain = self.tiles[x][y][0]
-                        for adj in self._adjacent(x, y):
-                            if adj[0] == terrain:
-                                blob.append(adj)
-                        self.blobs.append(blob)
-        return self.blobs
+                pass
+
     
     def get_score(self):
-        pass
+        """
+        Returns the score of the king domino board
+        """
+        blobs = self._get_blob()
+        score = 0
+        for blob in blobs:
+            score += len(blob)
+        return score
     
 def main():
     tiles = [
@@ -49,9 +44,9 @@ def main():
     # print(tiles)
     board = Board(tiles=tiles)
     adjacent = board._adjacent(2,2)
-    print(adjacent)
-    blobs = board._get_blob()
-    print(blobs)
+    print(board._get_blob())
+    # board.get_score()
+
 
 
 if __name__ == "__main__":
