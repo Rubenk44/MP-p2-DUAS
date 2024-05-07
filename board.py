@@ -2,6 +2,12 @@ class Board():
     def __init__(self, tiles = [[]]):
         self.tiles = tiles
         self.blobs = []
+
+    def add_tile(self, tile, x, y):
+        """
+        Adds a tile to the board at the specified position. The tile is a tuple (terrain, crowns)
+        """
+        self.tiles[x][y] = tile
     
     def _adjacent(self, x, y):
         adjacent = []
@@ -44,8 +50,10 @@ def main():
     # print(tiles)
     board = Board(tiles=tiles)
     adjacent = board._adjacent(2,2)
-    print(board._get_blob())
+    # print(board._get_blob())
     # board.get_score()
+    board.add_tile(("Forest", 1), 0, 0)
+    print(board.tiles)
 
 
 

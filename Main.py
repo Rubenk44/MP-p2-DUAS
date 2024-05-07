@@ -5,11 +5,35 @@ from board import Board
 
 from TM import Template_matching
 
+def get_tiles(image):
+    tiles = []
+    for i in range(5):
+        for j in range(5):
+            tiles.append(image[100*i:100*(i+1), 100*j:100*(j+1)])
+    return tiles
+
 def main():
     for _, _, files in os.walk(r"King Domino dataset\Cropped and perspective corrected boards"):
-        board = cv.imread(f"King Domino dataset\Cropped and perspective corrected boards\{files}.jpg")
+        for file in files:
+            game = cv.imread(f"King Domino dataset/Cropped and perspective corrected boards/{file}")
+            tiles = get_tiles(game)
+            board = Board()
+            groups = []
+            for tile in tiles:
+                # classifying the tile
+                crowns = Template_matching(os.listdir(r"Templates"), tile)
+                print(crowns)
+                # classify the tile
+                # terrain = classify(tile)
+                # add the tile to the Board object
+                # board.add_tile((terrain, crowns), x, y)
+            # print(board.get_score())
+            break
 
+            
 
+if __name__ == "__main__":
+    main()
 
 scores = {"1.jpg":"36","2.jpg":"43","3.jpg":"52","4.jpg":"42","5.jpg":"36","6.jpg":"43",
           "7.jpg":"52","8.jpg":"42","9.jpg":"36","10.jpg":"38","11.jpg":"49","12.jpg":"22",

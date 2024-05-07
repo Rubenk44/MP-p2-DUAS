@@ -23,8 +23,8 @@ def Template_matching(Template_folder, img_bgr, threshold=0.749, iou_threshold=0
                 if crownbox == []: 
                     crownbox.append(newbox)
                     cv.rectangle(img_bgr, pts, (pts[0] + w, pts[1] + h), (0,255,255), 2)
-                    print(template_path)
-                    print(newbox)
+                    #print(template_path)
+                    #print(newbox)
 
                 for box in crownbox: 
                     xA = max(box[0], newbox[0])
@@ -49,10 +49,10 @@ def Template_matching(Template_folder, img_bgr, threshold=0.749, iou_threshold=0
                 if all(iou < iou_threshold for iou in unions):
                     crownbox.append(newbox)
                     cv.rectangle(img_bgr, pts, (pts[0] + w, pts[1] + h), (0,255,255), 2)
-                    print(template_path)
-                    print(newbox)
+                    #print(template_path)
+                    #print(newbox)
     # print(crownbox)
-    return (crownbox, len(crownbox))
+    return len(crownbox)
                
                 
                 
