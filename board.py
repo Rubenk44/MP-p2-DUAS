@@ -1,5 +1,5 @@
 class Board():
-    def __init__(self, tiles=[[]]):
+    def __init__(self):
         self.tiles = [
             [("None", 0), ("None", 0), ("None", 0), ("None", 0), ("None", 0)],
             [("None", 0), ("None", 0), ("None", 0), ("None", 0), ("None", 0)],
@@ -92,7 +92,10 @@ def main():
         [("Forest", 0), ("Plains", 0), ("Plains", 0), ("Plains", 1), ("Desert", 0)]
     ]
 
-    board = Board(tiles=tiles)
+    board = Board()
+    for x in range(len(tiles)):
+        for y in range(len(tiles[x])):
+            board.add_tile(tiles[x][y], x, y)
     print(board.get_score())
 
 if __name__ == "__main__":
