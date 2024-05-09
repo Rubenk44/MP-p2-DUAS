@@ -38,7 +38,7 @@ def train_model():
     X = df.drop("terrain", axis=1)
     NaN_rows = np.argwhere(np.isnan(X))
     y = df["terrain"]
-    model = RandomForestClassifier(n_estimators=100, n_jobs=-1)
+    model = RandomForestClassifier(n_estimators=100, n_jobs=-1, max_depth=10, random_state=42)
     model.fit(X, y)
     dump(model, "model.joblib")
 
