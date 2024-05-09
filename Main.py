@@ -44,7 +44,8 @@ def main():
         # iterates over each file in the directory
         for file in files:
             # checks if the file is above 59, as the first 59 images are the training set
-            if int(file.split(".")[0]) > 59:
+            # if int(file.split(".")[0]) > 59:
+            if int(file.split(".")[0]) == 37:
                 # checks file index
                 print(file)
                 # loads the full game
@@ -57,11 +58,14 @@ def main():
                 for num, tile in enumerate(tiles):
                     # template matches the tile to get the crowns
                     crowns = Template_matching(os.listdir(r"Templates"), tile)
+                    cv.imshow("Tile", tile)
+                    cv.waitKey(0)
                     # resizes the tile to 25x25 and flattens it to match training format
                     tile = cv.resize(tile, (25, 25))
                     tile = tile.flatten()
                     # predicts the terrain of the tile
                     terrain = model.predict([tile])[0]
+                    print(terrain)
                     # calculates the x and y position of the tile. the % operation is used to get the x position (vertical) 
                     # and the // operation is used to get the y position (horizontal)
                     x = num % 5
