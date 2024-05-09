@@ -1,9 +1,8 @@
-import numpy as np
 import pandas as pd
 import os
 import cv2 as cv
 from sklearn.ensemble import RandomForestClassifier
-from joblib import dump, load
+from joblib import dump
 
 def flatten_image(image):
     # Flatten the image using NumPy
@@ -36,7 +35,6 @@ def train_model():
     df = pd.read_csv("trainset.csv")
     df.dropna(inplace=True)
     X = df.drop("terrain", axis=1)
-    NaN_rows = np.argwhere(np.isnan(X))
     y = df["terrain"]
     model = RandomForestClassifier(n_estimators=100, n_jobs=-1, max_depth=10, random_state=42)
     model.fit(X, y)

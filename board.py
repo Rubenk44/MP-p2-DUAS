@@ -7,7 +7,6 @@ class Board():
             [("None", 0), ("None", 0), ("None", 0), ("None", 0), ("None", 0)],
             [("None", 0), ("None", 0), ("None", 0), ("None", 0), ("None", 0)]
         ]
-        self.blobs = []
 
     def add_tile(self, tile, x, y):
         """
