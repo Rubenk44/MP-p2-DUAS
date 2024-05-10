@@ -1,4 +1,0 @@
-Start småt: Brug de udklippede og perspektivkorrigerede spilleplader.
-Opbyg en ground truth: Beregn manuelt hvad scoren er for alle jeres plader.
-Opdel jeres planer i træningssæt (~80%) og testsæt (~20%). Brug træningssættet mens i udvikler og testsættet når I er færdige.
-Hvis det går rigtig godt, så udvid systemet, så det selv kan klippe spillepladerne ud af de fulde billeder.
